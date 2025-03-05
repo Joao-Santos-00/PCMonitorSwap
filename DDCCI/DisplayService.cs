@@ -80,6 +80,20 @@ namespace DDCCI
             return sb.ToString();
         }
 
+        public string GetCapability(MonitorInfo monitorInfo)
+        {
+            uint length = 0;
+            var monitor = GetPhysicalMonitors(monitorInfo.Desktop);
+
+            var sb = new StringBuilder((int)length);
+            if (!CapabilitiesRequestAndCapabilitiesReply(monitor[0].hPhysicalMonitor, sb, (uint)sb.Capacity))
+            {
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+
+            return sb.ToString();
+        }
+
         public void SetVCPCapability(MonitorInfo monitorInfo, char code, int val)
         {
             var monitor = GetPhysicalMonitors(monitorInfo.Desktop);
@@ -128,6 +142,25 @@ namespace DDCCI
                     MaxValue = maxValue
                 };
             }
+        }
+
+        public VCPCapability GetVCPCapability(MonitorInfo monitorInfo, char optCode)
+        {
+            var physicalMonitor = GetPhysicalMonitors(monitorInfo.Desktop);
+
+            uint currentValue = 0, maxValue = 0;
+            if (!GetVCPFeatureAndVCPFeatureReply(physicalMonitor[0].hPhysicalMonitor, optCode, IntPtr.Zero, out currentValue, out maxValue))
+            {
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+
+            return new VCPCapability()
+            {
+                OptCode = optCode,
+                Value = currentValue,
+                MaxValue = maxValue
+            };
+
         }
     }
 }
