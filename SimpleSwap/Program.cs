@@ -67,13 +67,13 @@ namespace SimpleSwap
             {
                 var monitor = monitors[0];          
                 //var capability = monitor.VCPCapabilities.Where(v => v.Name == "Input Source Select (0x60)").First();
-                if (vcp.Value != 15)
+                if (vcp.Value != 17)
                 {
-                    _displayService.SetVCPCapability(monitor.MonitorInfo, (char)0x60, 15);  // Set to Display Port
+                    _displayService.SetVCPCapability(monitor.MonitorInfo, (char)0x60, 17);  // Set to HDMI1
                 }
                 else
                 {
-                    _displayService.SetVCPCapability(monitor.MonitorInfo, (char)0x60, 17);  // Set to HDMI
+                    _displayService.SetVCPCapability(monitor.MonitorInfo, (char)0x60, 18);  // Set to HDMI2
                 }
             }
             
